@@ -19,17 +19,20 @@ class App extends Component {
       
   }  
   
-   
-     
-      
-      
-    
-  
-  
-  
   render() {
     return (
       <div className="App">
+        <input type="search" className='search_coder' placeholder='name'
+          onChange={(event) => {
+            console.log(event.target.value);
+            const searchedName = event.target.value.toLocaleLowerCase();
+            
+            const filerName = this.state.coders.filter((coder) => {
+              return coder.name.toLocaleLowerCase().includes(searchedName)
+            })
+            this.setState(() => { return { coders: filerName } })
+        }}
+        />  
         
         {this.state.coders.map((coder) => {
           return <h1 key={coder.id}>{ coder.name}</h1>
