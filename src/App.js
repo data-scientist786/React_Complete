@@ -5,7 +5,8 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      coders: [],
+      codersList: [],
+      filteredList:''
       
       
       
@@ -15,26 +16,34 @@ class App extends Component {
   componentDidMount() {
     fetch('https://jsonplaceholder.typicode.com/users')
       .then((response) => response.json())
-    .then((users)=>this.setState(()=>{return{coders:users}}))
+    .then((users)=>this.setState(()=>{return{codersList:users}}))
       
   }  
+  whenChange=(event) => {
+           
+            
+            const filteredList = event.target.value.toLocaleLowerCase();
+            
+           
+            this.setState(() => { return { filteredList } ;
+            }
+            )
+        }
   
   render() {
+    const { codersList, filteredList } = this.state;
+    const { whenChange } = this;
+
+     const givenName = codersList.filter((coder) => {
+              return coder.name.toLocaleLowerCase().includes(filteredList)
+            })
     return (
       <div className="App">
         <input type="search" className='search_coder' placeholder='name'
-          onChange={(event) => {
-            console.log(event.target.value);
-            const searchedName = event.target.value.toLocaleLowerCase();
-            
-            const filerName = this.state.coders.filter((coder) => {
-              return coder.name.toLocaleLowerCase().includes(searchedName)
-            })
-            this.setState(() => { return { coders: filerName } })
-        }}
+          onChange={whenChange}
         />  
         
-        {this.state.coders.map((coder) => {
+        {givenName.map((coder) => {
           return <h1 key={coder.id}>{ coder.name}</h1>
         })}  
       </div>
